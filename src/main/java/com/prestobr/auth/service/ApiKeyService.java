@@ -69,7 +69,7 @@ public class ApiKeyService {
         Set<String> roleNames = roles.stream().map(Role::getName).collect(Collectors.toSet());
 
         // Retorna a chave raw (original) apenas agora — é a única vez que ela fica visível
-        return new ApiKeyResponse(apiKey.getId(), apiKey.getDescription(), rawKey, roleNames, apiKey.getExpiresAt(), apiKey.getCreatedAt());
+        return new ApiKeyResponse(apiKey.getId(), apiKey.getDescription(), rawKey, apiKey.isActive(), roleNames, apiKey.getExpiresAt(), apiKey.getCreatedAt());
     }
 
     // Lista todas as API Keys do usuário autenticado
