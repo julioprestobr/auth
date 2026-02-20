@@ -64,4 +64,11 @@ public class AuthController {
     public List<ApiKeyResponse> getApiKeys(){
         return authService.getApiKeys();
     }
+
+    @PutMapping("/users/{id}/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateRoles(@PathVariable Long id, @RequestBody Set<String> roles) {
+        authService.updateRoles(id, roles);
+    }
 }
