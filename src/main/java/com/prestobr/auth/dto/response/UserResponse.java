@@ -12,7 +12,7 @@ public record UserResponse(
         String email,
         Boolean active,
         LocalDateTime createdAt,
-        Set<String> roles) {
+        Set<RoleResponse> roles) {
     public static UserResponse from(User user){
         return new UserResponse(
                 user.getId(),
@@ -20,7 +20,9 @@ public record UserResponse(
                 user.getEmail(),
                 user.isActive(),
                 user.getCreatedAt(),
-                user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toSet())
+                user.getRoles().stream()
+                        .map(RoleResponse::from)
+                        .collect(Collectors.toSet())
         );
     }
 }
