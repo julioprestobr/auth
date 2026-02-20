@@ -43,7 +43,7 @@ public class AuthController {
     }
 
     @GetMapping("/roles")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public List<RoleResponse> getRoles() {
         return authService.getRoles();
     }
