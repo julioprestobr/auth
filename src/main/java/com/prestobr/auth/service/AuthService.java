@@ -4,10 +4,12 @@ import com.prestobr.auth.domain.entity.Role;
 import com.prestobr.auth.domain.entity.User;
 import com.prestobr.auth.dto.request.LoginRequest;
 import com.prestobr.auth.dto.request.RegisterRequest;
+import com.prestobr.auth.dto.response.ApiKeyResponse;
 import com.prestobr.auth.dto.response.LoginResponse;
 import com.prestobr.auth.dto.response.RoleResponse;
 import com.prestobr.auth.dto.response.UserResponse;
 import com.prestobr.auth.infra.security.JwtService;
+import com.prestobr.auth.repository.ApiKeyRepository;
 import com.prestobr.auth.repository.RoleRepository;
 import com.prestobr.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ApiKeyRepository apiKeyRepository;
 
     // Registra um novo usuário no sistema.
     public void register(RegisterRequest request) {
@@ -120,6 +123,12 @@ public class AuthService {
     public List<UserResponse> getUsers(){
         return userRepository.findAll().stream()
                 .map(user -> UserResponse.from(user))
+                .toList();
+    }
+
+    public List<ApiKeyResponse> getApiKeys(){
+        return apiKeyRepository.findAll().stream()
+                .map(apiKey -> ApiKeyResponse.from(apiKey))
                 .toList();
     }
 }

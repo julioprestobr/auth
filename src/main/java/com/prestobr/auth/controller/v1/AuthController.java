@@ -2,6 +2,7 @@ package com.prestobr.auth.controller.v1;
 
 import com.prestobr.auth.dto.request.LoginRequest;
 import com.prestobr.auth.dto.request.RegisterRequest;
+import com.prestobr.auth.dto.response.ApiKeyResponse;
 import com.prestobr.auth.dto.response.LoginResponse;
 import com.prestobr.auth.dto.response.RoleResponse;
 import com.prestobr.auth.dto.response.UserResponse;
@@ -55,5 +56,12 @@ public class AuthController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
         return authService.getUsers();
+    }
+
+    //Obtém lista de apikeys cadastradas
+    @GetMapping("/apikeys")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ApiKeyResponse> getApiKeys(){
+        return authService.getApiKeys();
     }
 }
