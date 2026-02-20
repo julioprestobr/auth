@@ -35,13 +35,6 @@ public class ApiKeyController {
         return apiKeyService.create(username, request);
     }
 
-    // Lista todas as API Keys do usuário autenticado
-    @Operation(summary = "Lista todas as API Keys do usuário autenticado")
-    @GetMapping
-    public List<ApiKeyResponse> list(@AuthenticationPrincipal String username) {
-        return apiKeyService.listByUser(username);
-    }
-
     // Revoga (desativa) uma API Key pelo ID
     @Operation(summary = "Revoga uma API Key")
     @DeleteMapping("/{id}")
@@ -61,6 +54,13 @@ public class ApiKeyController {
             @RequestBody ApiKeyUpdateRequest request
     ) {
         return apiKeyService.update(username, id, request);
+    }
+
+    // Lista todas as API Keys do usuário autenticado
+    @Operation(summary = "Lista todas as API Keys do usuário autenticado")
+    @GetMapping
+    public List<ApiKeyResponse> list(@AuthenticationPrincipal String username) {
+        return apiKeyService.listByUser(username);
     }
 
     @Operation(summary = "Lista todas as API Keys (admin)")

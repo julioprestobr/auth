@@ -55,16 +55,6 @@ public class ApiKeyService {
         return ApiKeyResponse.from(apiKey, rawKey);
     }
 
-    public List<ApiKeyResponse> listByUser(String username) {
-
-        User user = userRepository.findByUsernameOrderById(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
-
-        return apiKeyRepository.findByUserIdOrderByIdAsc(user.getId()).stream()
-                .map(ApiKeyResponse::fromWithoutKey)
-                .toList();
-    }
-
     public void revoke(String username, Long keyId) {
 
         ApiKey apiKey = apiKeyRepository.findById(keyId)
@@ -105,6 +95,16 @@ public class ApiKeyService {
 
         apiKeyRepository.save(apiKey);
         return ApiKeyResponse.fromWithoutKey(apiKey);
+    }
+
+    public List<ApiKeyResponse> listByUser(String username) {
+
+        User user = userRepository.findByUsernameOrderById(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
+
+        return apiKeyRepository.findByUserIdOrderByIdAsc(user.getId()).stream()
+                .map(ApiKeyResponse::fromWithoutKey)
+                .toList();
     }
 
     // Obtém todas as apikeys

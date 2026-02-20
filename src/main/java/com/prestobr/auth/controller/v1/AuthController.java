@@ -2,7 +2,6 @@ package com.prestobr.auth.controller.v1;
 
 import com.prestobr.auth.dto.request.LoginRequest;
 import com.prestobr.auth.dto.request.RegisterRequest;
-import com.prestobr.auth.dto.response.ApiKeyResponse;
 import com.prestobr.auth.dto.response.LoginResponse;
 import com.prestobr.auth.dto.response.RoleResponse;
 import com.prestobr.auth.dto.response.UserResponse;
@@ -13,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,10 +45,17 @@ public class AuthController {
     }
 
     // Obtém lista de roles cadastrados
-    @GetMapping("/roles")
+    @GetMapping("/roles/admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<RoleResponse> getRoles() {
-        return authService.getRoles();
+    public List<RoleResponse> listAllRoles() {
+        return authService.listAllRoles();
+    }
+
+    // Obtém lista de roles cadastrados
+    @Operation(summary = "Lista todas as Roles do usuário autenticado")
+    @GetMapping("/roles")
+    public List<RoleResponse> getRoles(@AuthenticationPrincipal String username) {
+        return authService.listRolesByUser(username);
     }
 
     // Obtém lista de users cadastrados

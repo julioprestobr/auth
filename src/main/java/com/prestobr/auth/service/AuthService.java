@@ -4,12 +4,10 @@ import com.prestobr.auth.domain.entity.Role;
 import com.prestobr.auth.domain.entity.User;
 import com.prestobr.auth.dto.request.LoginRequest;
 import com.prestobr.auth.dto.request.RegisterRequest;
-import com.prestobr.auth.dto.response.ApiKeyResponse;
 import com.prestobr.auth.dto.response.LoginResponse;
 import com.prestobr.auth.dto.response.RoleResponse;
 import com.prestobr.auth.dto.response.UserResponse;
 import com.prestobr.auth.infra.security.JwtService;
-import com.prestobr.auth.repository.ApiKeyRepository;
 import com.prestobr.auth.repository.RoleRepository;
 import com.prestobr.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +32,6 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final ApiKeyRepository apiKeyRepository;
 
     // Registra um novo usuário no sistema.
     public void register(RegisterRequest request) {
@@ -114,17 +111,26 @@ public class AuthService {
         return new LoginResponse(token, user.getUsername());
     }
 
-    public List<RoleResponse> getRoles(){
-        return roleRepository.findAll().stream()
-                .map(role -> RoleResponse.from(role))
-                .toList();
-    }
-
     public List<UserResponse> getUsers(){
         return userRepository.findAll().stream()
                 .map(user -> UserResponse.from(user))
                 .toList();
     }
 
+    public List<RoleResponse> listAllRoles(){
+        return roleRepository.findAll().stream()
+                .map(role -> RoleResponse.from(role))
+                .toList();
+    }
 
+
+    public List<RoleResponse> listRolesByUser(String username) {
+
+        User user = userRepository.findByUsernameOrderById(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
+
+        return user.getRoles().stream()
+                .map(RoleResponse::from)
+                .toList();
+    }
 }
