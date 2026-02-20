@@ -42,6 +42,7 @@ public class AuthController {
         return authService.login(request);
     }
 
+    // Obtém lista de roles cadastrados
     @GetMapping("/roles")
     @PreAuthorize("hasRole('ADMIN')")
     public List<RoleResponse> getRoles() {
