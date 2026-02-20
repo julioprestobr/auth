@@ -83,6 +83,7 @@ public class ApiKeyService {
                         key.getId(),
                         key.getDescription(),
                         null, // chave nunca retornada na listagem por segurança
+                        key.isActive(),
                         key.getRoles().stream().map(Role::getName).collect(Collectors.toSet()),
                         key.getExpiresAt(),
                         key.getCreatedAt()
