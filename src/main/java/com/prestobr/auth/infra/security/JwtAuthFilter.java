@@ -36,7 +36,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // Lê o header "Authorization" da requisição
         String authHeader = request.getHeader("Authorization");
-        System.out.println("Header: " + authHeader);
 
         // Se não tem o header ou não começa com "Bearer ", continua sem autenticar. O Spring Security vai bloquear depois se o endpoint exigir autenticação
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -52,8 +51,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("Token válido: " + jwtService.isValid(token));
-        System.out.println("Username: " + jwtService.extractUsername(token));
 
         // Extrai o username e as roles do payload do token
         String username = jwtService.extractUsername(token);
