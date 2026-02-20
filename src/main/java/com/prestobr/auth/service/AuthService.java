@@ -128,7 +128,7 @@ public class AuthService {
 
     // Obtém apikeys
     public List<ApiKeyResponse> getApiKeys(){
-        return apiKeyRepository.findAll().stream()
+        return apiKeyRepository.findAllByOrderByIdAsc().stream()
                 .map(apikey -> ApiKeyResponse.fromWithoutKey(apikey))
                 .toList();
     }
