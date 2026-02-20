@@ -1,6 +1,7 @@
 package com.prestobr.auth.controller.v1;
 
 import com.prestobr.auth.dto.request.ApiKeyRequest;
+import com.prestobr.auth.dto.request.ApiKeyUpdateRequest;
 import com.prestobr.auth.dto.response.ApiKeyResponse;
 import com.prestobr.auth.service.ApiKeyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,5 +50,15 @@ public class ApiKeyController {
             @PathVariable Long id
     ) {
         apiKeyService.revoke(username, id);
+    }
+
+    @Operation(summary = "Atualiza uma API Key")
+    @PutMapping("/{id}")
+    public ApiKeyResponse update(
+            @AuthenticationPrincipal String username,
+            @PathVariable Long id,
+            @RequestBody ApiKeyUpdateRequest request
+    ) {
+        return apiKeyService.update(username, id, request);
     }
 }

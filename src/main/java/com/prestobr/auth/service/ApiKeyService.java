@@ -4,6 +4,7 @@ import com.prestobr.auth.domain.entity.ApiKey;
 import com.prestobr.auth.domain.entity.Role;
 import com.prestobr.auth.domain.entity.User;
 import com.prestobr.auth.dto.request.ApiKeyRequest;
+import com.prestobr.auth.dto.request.ApiKeyUpdateRequest;
 import com.prestobr.auth.dto.response.ApiKeyResponse;
 import com.prestobr.auth.repository.ApiKeyRepository;
 import com.prestobr.auth.repository.RoleRepository;
@@ -75,5 +76,34 @@ public class ApiKeyService {
 
         apiKey.setActive(false);
         apiKeyRepository.save(apiKey);
+    }
+
+    public ApiKeyResponse update(String username, Long keyId, ApiKeyUpdateRequest request) {
+
+        ApiKey apiKey = apiKeyRepository.findById(keyId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "API Key not found."));
+
+        if (!apiKey.getUser().getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You don't own this API Key.");
+        }
+
+        if (request.description() != null) {
+            apiKey.setDescription(request.description());
+        }
+
+        if (request.roles() != null && !request.roles().isEmpty()) {
+            Set<Role> roles = request.roles().stream()
+                    .map(name -> roleRepository.findByName(name)
+                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found: " + name)))
+                    .collect(Collectors.toSet());
+            apiKey.setRoles(roles);
+        }
+
+        if (request.expiresAt() != null) {
+            apiKey.setExpiresAt(request.expiresAt());
+        }
+
+        apiKeyRepository.save(apiKey);
+        return ApiKeyResponse.fromWithoutKey(apiKey);
     }
 }
