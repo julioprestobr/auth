@@ -126,6 +126,7 @@ public class AuthService {
                 .toList();
     }
 
+    // Obtém apikeys
     public List<ApiKeyResponse> getApiKeys(){
         return apiKeyRepository.findAll().stream()
                 .map(apiKey -> ApiKeyResponse.from(apiKey))
