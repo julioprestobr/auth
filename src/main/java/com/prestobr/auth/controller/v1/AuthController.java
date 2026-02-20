@@ -4,6 +4,7 @@ import com.prestobr.auth.dto.request.LoginRequest;
 import com.prestobr.auth.dto.request.RegisterRequest;
 import com.prestobr.auth.dto.response.LoginResponse;
 import com.prestobr.auth.dto.response.RoleResponse;
+import com.prestobr.auth.dto.response.UserResponse;
 import com.prestobr.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,5 +48,12 @@ public class AuthController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<RoleResponse> getRoles() {
         return authService.getRoles();
+    }
+
+    // Obtém lista de users cadastrados
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getUsers() {
+        return authService.getUsers();
     }
 }
