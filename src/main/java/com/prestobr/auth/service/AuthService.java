@@ -5,6 +5,7 @@ import com.prestobr.auth.domain.entity.User;
 import com.prestobr.auth.dto.request.LoginRequest;
 import com.prestobr.auth.dto.request.RegisterRequest;
 import com.prestobr.auth.dto.response.LoginResponse;
+import com.prestobr.auth.dto.response.RoleResponse;
 import com.prestobr.auth.infra.security.JwtService;
 import com.prestobr.auth.repository.RoleRepository;
 import com.prestobr.auth.repository.UserRepository;
@@ -107,5 +108,11 @@ public class AuthService {
         String token = jwtService.generateToken(user.getUsername(), roles);
 
         return new LoginResponse(token, user.getUsername());
+    }
+
+    public List<RoleResponse> getRoles(){
+        return roleRepository.findAll().stream()
+                .map(role -> RoleResponse.from(role))
+                .toList();
     }
 }
