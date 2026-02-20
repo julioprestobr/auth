@@ -106,4 +106,11 @@ public class ApiKeyService {
         apiKeyRepository.save(apiKey);
         return ApiKeyResponse.fromWithoutKey(apiKey);
     }
+
+    // Obtém todas as apikeys
+    public List<ApiKeyResponse> listAll(){
+        return apiKeyRepository.findAllByOrderByIdAsc().stream()
+                .map(apikey -> ApiKeyResponse.fromWithoutKey(apikey))
+                .toList();
+    }
 }

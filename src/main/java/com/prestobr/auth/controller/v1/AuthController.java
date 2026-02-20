@@ -58,13 +58,6 @@ public class AuthController {
         return authService.getUsers();
     }
 
-    //Obtém lista de apikeys cadastradas.
-    @GetMapping("/apikeys")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<ApiKeyResponse> getApiKeys(){
-        return authService.getApiKeys();
-    }
-
     @PutMapping("/users/{id}/roles")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)

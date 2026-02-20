@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +61,12 @@ public class ApiKeyController {
             @RequestBody ApiKeyUpdateRequest request
     ) {
         return apiKeyService.update(username, id, request);
+    }
+
+    @Operation(summary = "Lista todas as API Keys (admin)")
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ApiKeyResponse> listAll() {
+        return apiKeyService.listAll();
     }
 }
