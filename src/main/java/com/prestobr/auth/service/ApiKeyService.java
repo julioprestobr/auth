@@ -31,11 +31,11 @@ public class ApiKeyService {
 
     public ApiKeyResponse create(String username, ApiKeyRequest request) {
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameOrderById(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
 
         Set<Role> roles = request.getRoles().stream()
-                .map(roleName -> roleRepository.findByName(roleName)
+                .map(roleName -> roleRepository.findByNameOrderById(roleName)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found: " + roleName)))
                 .collect(Collectors.toSet());
 
@@ -57,10 +57,10 @@ public class ApiKeyService {
 
     public List<ApiKeyResponse> listByUser(String username) {
 
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameOrderById(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
 
-        return apiKeyRepository.findByUserId(user.getId()).stream()
+        return apiKeyRepository.findByUserIdOrderByIdAsc(user.getId()).stream()
                 .map(ApiKeyResponse::fromWithoutKey)
                 .toList();
     }
@@ -93,7 +93,7 @@ public class ApiKeyService {
 
         if (request.roles() != null && !request.roles().isEmpty()) {
             Set<Role> roles = request.roles().stream()
-                    .map(name -> roleRepository.findByName(name)
+                    .map(name -> roleRepository.findByNameOrderById(name)
                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found: " + name)))
                     .collect(Collectors.toSet());
             apiKey.setRoles(roles);

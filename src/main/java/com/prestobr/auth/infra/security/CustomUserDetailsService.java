@@ -36,7 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        com.prestobr.auth.domain.entity.User user = userRepository.findByUsername(username)
+        com.prestobr.auth.domain.entity.User user = userRepository.findByUsernameOrderById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         // Converte as roles da entidade para o formato do Spring Security

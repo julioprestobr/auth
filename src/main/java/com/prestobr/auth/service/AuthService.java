@@ -52,7 +52,7 @@ public class AuthService {
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
             // Busca cada role informada pelo nome
             roles = request.getRoles().stream()
-                    .map(name -> roleRepository.findByName(name) // verifica se o role existe
+                    .map(name -> roleRepository.findByNameOrderById(name) // verifica se o role existe
                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found: " + name)))
                     .collect(Collectors.toSet()); // junta tudo de volta em um Set<Role>
         }
@@ -75,7 +75,7 @@ public class AuthService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
 
         Set<Role> roles = roleNames.stream()
-                .map(name -> roleRepository.findByName(name) // verifica se o role existe
+                .map(name -> roleRepository.findByNameOrderById(name) // verifica se o role existe
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role not found: " + name)))
                 .collect(Collectors.toSet());
 
@@ -98,7 +98,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByUsernameOrderById(request.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials."));
 
         if (!user.isActive()) {

@@ -8,7 +8,7 @@ import java.util.Optional;
 // Repositório responsável pelo acesso ao banco de dados para a entidade User
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsernameOrderById(String username);
 
     Optional<User> findByEmail(String email);
 
